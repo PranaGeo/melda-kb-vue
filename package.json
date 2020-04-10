@@ -1,7 +1,7 @@
 {
   "name": "melda-kb-vue",
   "description": "A Vue.js UMD project",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "suleymantaspinar <sl.taspinar@gmail.com>",
   "main": "src/main.js",
   "scripts": {
