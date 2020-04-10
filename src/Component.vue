@@ -100,8 +100,8 @@
             <thead>
               <tr>
                 <th style="text-align:left;">Name</th>
-                <th></th>
-                <th style="text-align:right;">Description</th>
+                <th>Description</th>
+                <th style="text-align:right;">Package</th>
               </tr>
             </thead>
             <tbody>
@@ -116,16 +116,20 @@
                 >
                 {{ methodItem.name}}
                 </td>
-                <td
+                 <td class="nowrap package-description"
+                  style="max-width: 1px;"
+                  :title="methodItem.title"
+                  v-html="methodItem.title "
                  >
                 </td>
                 <td
-                  class="nowrap package-description"
+                class="text-primary package-name"
                   style="max-width: 1px; text-align:right;"
-                  :title="methodItem.title"
-                  v-html="methodItem.title "
+                  :title="methodItem.packageName"
+                  v-html="methodItem.packageName "
                 >
                 </td>
+
               </tr>
             </tbody>
           </table>
@@ -197,8 +201,9 @@
             <thead>
               <tr>
                 <th>Method Name</th>
-                <th>Package</th>
                 <th>Method Description</th>
+                <th>Package</th>
+
               </tr>
             </thead>
             <tbody>
@@ -212,9 +217,6 @@
                 >
                   {{ (methodItem.name) }}
                 </td>
-                <td class="text-primary package-name"
-                  :title="methodItem.packageName"
-                ></td>
                 <td
                   class="package-version nowrap"
                   
@@ -222,6 +224,10 @@
                 >
                   {{ (methodItem.title) }}
                 </td>
+                  <td class="text-primary package-name"
+                  :title="methodItem.packageName"
+                  v-html="methodItem.packageName"
+                ></td>
               </tr>
             </tbody>
           </table>
