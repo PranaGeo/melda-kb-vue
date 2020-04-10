@@ -197,7 +197,7 @@
             <thead>
               <tr>
                 <th>Method Name</th>
-                <th></th>
+                <th>Package</th>
                 <th>Method Description</th>
               </tr>
             </thead>
@@ -212,7 +212,8 @@
                 >
                   {{ (methodItem.name) }}
                 </td>
-                <td
+                <td class="text-primary package-name"
+                  :title="methodItem.packageName"
                 ></td>
                 <td
                   class="package-version nowrap"
