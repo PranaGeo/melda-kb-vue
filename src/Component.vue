@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class = "container">
     <div class="loading" v-if="loading">
       <i class="fa fa-cog fa-spin"></i>
     </div>
@@ -8,19 +8,17 @@
       <div  v-if="state != 'search-all'">
         <nav aria-label = "breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"
-                v-for="(item,index) in breadcrumb"
-                @click="setState(item.state)"
-                v-bind:class = "{ 'active': index + 1 == breadcrumb.length }"
-                >
-                <a>
-               {{ item.name }}
-
-                </a>
-            </li>
+          <li class="breadcrumb-item"
+              v-for="(item,index) in breadcrumb"
+              @click="setState(item.state)"
+              v-bind:class = "{ 'active': index + 1 == breadcrumb.length }"
+              >
+              <a>
+             {{ item.name }}
+              </a>
+          </li>
           </ol>
         </nav>
-          
         </a>
       </div>
 
@@ -35,11 +33,16 @@
             @keydown.enter="searchInHome()"
             v-model="search"
           />
+          
           <div class ="card search-card" v-if=" packages.length != 0 ">
             <table class="table table-borderless" style="borderless">
               <tbody>
                 <tr class="table-active">
-                  <th style="text-align:left;">Packages</th>
+                  <th style="text-align:left;">Packages
+                    <span class="badge badge-pill badge-success">
+                    {{ setCount(packageCount) }} 
+                    </span>
+                  </th>
                   <td
                   style="text-align:right;"><button class ="btn btn-primary"
                   @click="searchAll( searchIn = 'package')"> View All </button></td>
@@ -84,14 +87,19 @@
             </tbody>
           </table>
           </div>
+          
           <div class ="card search-card" v-if="searchMethods.length != 0">
             <table class="table table-borderless" style="borderless">
               <tbody>
                 <tr class="table-active">
-                  <th style="text-align:left;">Methods</th>
+                  <th style="text-align:left;">Methods
+                  <span class="badge badge-pill badge-success">{{ setCount(methodCount) }}</span>
+                  </th>
                   <td  class="package-name"
-                  style="text-align:right;"><button class ="btn btn-primary"
-                  @click="searchAll( searchIn = 'method' )"> View All </button></td>
+                  style="text-align:right;">
+                  <button class ="btn btn-primary"
+                  @click="searchAll( searchIn = 'method' )"> View All </button>
+                  </td>
                 </tr>
             </tbody>
             </table>
@@ -134,11 +142,16 @@
             </tbody>
           </table>
           </div>
+
           <div class="card search-card" v-if="authors.length != 0">
             <table class="table table-borderless" style="borderless">
               <tbody>
                 <tr class="table-active">
-                  <th style="text-align:left;">Authors</th>
+                  <th style="text-align:left;">Authors
+                      <span class="badge badge-pill badge-success">
+                    {{ setCount(authorCount) }}
+                    </span>
+                  </th>
                   <td  class="package-name"
                   style="text-align:right;"><button class ="btn btn-primary"
                   @click="searchAll( searchIn = 'author' )"> View All </button></td>
@@ -188,6 +201,7 @@
             </div>
           </div>
         </div>
+        
         <div v-else-if="state === 'search-method-only'">
           <input
             type="text"
@@ -238,6 +252,7 @@
           style="background-color:#ff7b00"
           >Load More</button>
         </div>
+        
         <div v-else-if="state === 'search-package-only'">
           <input
             type="text"
@@ -290,7 +305,8 @@
           style="background-color:#ff7b00"
           >Load More</button>
         </div>
-        <div v-else-if="state === 'search-author-only'">
+      
+      <div v-else-if="state === 'search-author-only'">
             <input
               type="text"
               placeholder="Search in Authors"
@@ -338,7 +354,8 @@
           style="background-color:#ff7b00"
           v-if = showButton
           >Load More</button>
-          </div>
+        </div>
+        
         <div class="table-responsive" v-else-if="state === 'package-detail'">
           <table class="table table-striped package-meta">
             <tbody>
@@ -386,6 +403,36 @@
               </tr>
             </tbody>
           </table>
+        
+        <section v-if="packageProjects.length != 0">
+          <h4> Executable Projects using the {{ packageName }} package </h4>
+           <table
+            class="table table-borderless table-hover package-table">
+            <tbody>
+              <tr v-for="project in packageProjects ">
+              <td class="nowrap package-description">
+                {{ project.title }}
+                by  {{ project.owner.name }}
+                <button class="btn btn-default btn-sm btn-secondary"
+                          type="button"
+                          @click='$emit("fork",project.uri)'
+                          title="Fork">Fork
+                          <i class="fa fa-code-branch"></i>
+                </button>
+               
+                <button class="btn btn-default btn-sm btn-secondary pl-2"
+                          type="button"
+                          title="Open project in new window"
+                          @click="openUrl(project.uri)"
+                          >Open in melda.io
+                          <i class="fa fa-external-link-square-alt"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
         </div>
 
         <div v-else-if="state === 'method-detail'">
@@ -468,6 +515,35 @@
             </h4>
             <pre v-html="methodInfo.Example"></pre>
           </div>
+       
+       <section v-if="methodProjects.length != 0">
+          <h4> Executable Projects using the {{ methodInfo["Name"] }} method </h4>
+           <table
+            class="table table-borderless table-hover package-table">
+            <tbody>
+              <tr v-for="project in methodProjects ">
+              <td class="nowrap package-description">
+                {{ project.title }}
+                by {{ project.owner.name }}
+                <button class="btn btn-default btn-sm btn-secondary"
+                          type="button"
+                          @click='$emit("fork",project.uri)'
+                          title="Fork">Fork
+                          <i class="fa fa-code-branch"></i>
+                </button>
+               
+                <button class="btn btn-default btn-sm btn-secondary pl-2"
+                          type="button"
+                          title="Open project in new window"
+                          @click="openUrl(project.uri)"
+                          >Open in melda.io
+                          <i class="fa fa-external-link-square-alt"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
 
       </div>
       </div>
@@ -478,12 +554,16 @@
 <script>
 const BASE = "https://appdev.melda.io/api/rkb" 
 const API = "https://kbdev.melda.io/"
+const SERVER = "https://appdev.melda.io/" 
 
 export default {
-  name: 'melda-test',
+  name: 'MeldaKnowledgeBase',
   data() {
     return {
       totalCount:0,
+      packageCount:0,
+      methodCount:0,
+      authorCount:0,
       isSearching: false,
       state: 'search-all',
       loading: false,
@@ -503,6 +583,8 @@ export default {
       methods: [],
       authors: [],
       searchMethods: [],
+      packageProjects: [],
+      methodProjects: [],
       breadcrumb: [
         {
           name: 'Home',
@@ -559,6 +641,19 @@ export default {
       span.innerHTML = text
       span.innerText = span.innerText.replace(/\\n|\n/g," ")   
       return span.innerText
+    },
+
+    openUrl(url){
+      url = SERVER + url
+      window.open(url,"_blank")
+    },
+
+    setCount( count) {
+      if( count < 1000 ) {
+        return count
+      } else if ( count > 1000 ) {
+        return Math.round(count / 1000) + "K"
+      }
     },
 
     setState(state) {
@@ -657,8 +752,10 @@ export default {
       this.$http
         .get(BASE  + `/cran-package-detail?package=${name}`)
         .then(({ body }) => {
+          console.log(body)
           this.methods = body.methods
           this.packageInfo = this.sortPackage(body.package)
+          this.packageProjects = body.projects
           this.state = 'package-detail'
           this.loading = false
 
@@ -687,8 +784,8 @@ export default {
       this.$http
         .get(BASE +`/cran-method-detail?package=${packageName}&method=${method}`)
         .then(({ body }) => {
+          console.log(body)
           this.methods = body.package.methods
-
           var breadcrumb = [
             {
               state: 'search-all',
@@ -710,11 +807,14 @@ export default {
           
           if (body.method) {
             this.methodInfo = this.sortMethod(body.method)
-            
             breadcrumb.push({
               state: 'method-detail',
               name: this.methodInfo.Name
             })
+          }
+          
+          if ( body.projects ){
+            this.methodProjects = body.projects
           }
 
           this.state = 'method-detail'
@@ -811,19 +911,19 @@ export default {
          + "&size=" + this.size)
         .then( ({body}) => {
           this.packages = body.packages;
-          this.totalCount = body.count
+          this.packageCount = body.count
         })
         this.$http.get(API +'/search?q=' + this.search + '&in=method'
         + "&size=" + this.size)
         .then( ({body}) => {
           this.searchMethods = body.methods;
-          this.totalCount = body.count
+          this.methodCount = body.count
         })        
         this.$http.get(API +'/search?q=' + this.search + '&in=author' 
         + "&size=" + this.size)
         .then( ({body}) => {
           this.authors = body.packages;
-          this.totalCount = body.count
+          this.authorCount = body.count
         })   
     },
 
@@ -865,7 +965,7 @@ export default {
 
 <style scoped>
 section {
-  background: brown;
+  background:whitesmoke;
 }
 
 
