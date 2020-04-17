@@ -558,6 +558,12 @@ const SERVER = "https://appdev.melda.io/"
 
 export default {
   name: 'MeldaKnowledgeBase',
+  props:{
+    user:{
+      default:null,
+      required:false
+    }
+  },
   data() {
     return {
       totalCount:0,
