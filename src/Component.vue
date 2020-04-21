@@ -460,7 +460,7 @@
               Usage
               <button
                 class="btn btn-sm btn-success"
-                @click="$emit('eval', usageWLib, 'R')"
+                @click="$emit('eval', methodInfo.usageWLib, 'R')"
               >
                 <i class="fa fa-play"></i>
               </button>
@@ -509,7 +509,7 @@
               Examples
               <button
                 class="btn btn-sm btn-success"
-                @click="$emit('eval', exampleWLib, 'R')"
+                @click="$emit('eval', methodInfo.exampleWLib, 'R')"
               >
                 <i class="fa fa-play"></i>
               </button>
@@ -604,8 +604,6 @@ export default {
       totalPages: 0,
       search: '',
       packageName: '',
-      usageWLib: '',
-      exampleWLib: '',
     }
   },
 
