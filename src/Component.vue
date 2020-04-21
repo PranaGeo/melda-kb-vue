@@ -447,7 +447,7 @@
                 </td>
               </tr>
                 <tr v-for="(item,key) in methodInfo">
-                <th> {{key }} </th>
+                <th> {{ key }} </th>
                 <td v-html="item"> 
                 </td>
               </tr>
@@ -459,7 +459,7 @@
               Usage
               <button
                 class="btn btn-sm btn-success"
-                @click="$emit('eval', methodInfo.Usage, 'R')"
+                @click="$emit('eval', methodInfo.UsageWLib, 'R')"
               >
                 <i class="fa fa-play"></i>
               </button>
@@ -508,7 +508,7 @@
               Examples
               <button
                 class="btn btn-sm btn-success"
-                @click="$emit('eval', methodInfo.Example, 'R')"
+                @click="$emit('eval', methodInfo.ExampleWLib, 'R')"
               >
                 <i class="fa fa-play"></i>
               </button>
@@ -583,7 +583,7 @@ export default {
         title: '',
         details: '',
         references: '',
-        Keyword: ''
+        Keyword: '',
       },
       packages: [],
       methods: [],
@@ -813,12 +813,13 @@ export default {
           
           if (body.method) {
             this.methodInfo = this.sortMethod(body.method)
+            this.methodInfo.UsageWLib = `library(${this.packageName}) \n ${this.methodInfo.Usage}`
+            this.methodInfo.ExampleWLib = `library(${this.packageName}) \n ${this.methodInfo.Example}`
             breadcrumb.push({
               state: 'method-detail',
               name: this.methodInfo.Name
             })
           }
-          
           if ( body.projects ){
             this.methodProjects = body.projects
           }
