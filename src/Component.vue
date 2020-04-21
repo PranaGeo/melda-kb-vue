@@ -460,7 +460,7 @@
               Usage
               <button
                 class="btn btn-sm btn-success"
-                @click="$emit('eval', this.usageWLib, 'R')"
+                @click="$emit('eval', usageWLib, 'R')"
               >
                 <i class="fa fa-play"></i>
               </button>
@@ -509,7 +509,7 @@
               Examples
               <button
                 class="btn btn-sm btn-success"
-                @click="$emit('eval', this.exampleWLib, 'R')"
+                @click="$emit('eval', exampleWLib, 'R')"
               >
                 <i class="fa fa-play"></i>
               </button>
@@ -568,7 +568,7 @@ export default {
   data() {
     return {
       methodKeys:['Usage','Argument','Example','Order','Alias','methodId',
-      "Methods","Value"],
+      "Methods","Value","usageWLib","exampleWLib"],
       totalCount:0,
       packageCount:0,
       methodCount:0,
@@ -815,8 +815,8 @@ export default {
           
           if (body.method) {
             this.methodInfo = this.sortMethod( body.method )
-            this.usageWLib = `library(${this.packageName}) \n${this.methodInfo.Usage}`
-            this.exampleWLib = `library(${this.packageName}) \n${this.methodInfo.Example}`
+            this.methodInfo.usageWLib = `library(${this.packageName}) \n${this.methodInfo.Usage}`
+            this.methodInfo.exampleWLib = `library(${this.packageName}) \n${this.methodInfo.Example}`
             breadcrumb.push({
               state: 'method-detail',
               name: this.methodInfo.Name
