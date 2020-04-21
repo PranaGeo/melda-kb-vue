@@ -813,8 +813,8 @@ export default {
           
           if (body.method) {
             this.methodInfo = this.sortMethod(body.method)
-            this.methodInfo.UsageWLib = `library(${this.packageName}) \n ${this.methodInfo.Usage}`
-            this.methodInfo.ExampleWLib = `library(${this.packageName}) \n ${this.methodInfo.Example}`
+            this.methodInfo.UsageWLib = `library(${this.packageName}) \n${this.methodInfo.Usage}`
+            this.methodInfo.ExampleWLib = `library(${this.packageName}) \n${this.methodInfo.Example}`
             breadcrumb.push({
               state: 'method-detail',
               name: this.methodInfo.Name
