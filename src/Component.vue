@@ -360,7 +360,7 @@
           <table class="table table-striped package-meta">
             <tbody>
               <tr v-for="(item,key) in packageInfo">
-                <th> {{key }} </th>
+                <th> {{ key }} </th>
                 <td v-html="item"> 
                 </td>
               </tr>
@@ -446,7 +446,8 @@
                   {{ packageName }}
                 </td>
               </tr>
-                <tr v-for="(item,key) in methodInfo">
+                <tr v-for="(item,key) in methodInfo"
+                v-if="!methodKeys.includes( key ) ">
                 <th> {{ key }} </th>
                 <td v-html="item"> 
                 </td>
@@ -459,7 +460,7 @@
               Usage
               <button
                 class="btn btn-sm btn-success"
-                @click="$emit('eval', methodInfo.UsageWLib, 'R')"
+                @click="$emit('eval', this.usageWLib, 'R')"
               >
                 <i class="fa fa-play"></i>
               </button>
@@ -508,7 +509,7 @@
               Examples
               <button
                 class="btn btn-sm btn-success"
-                @click="$emit('eval', methodInfo.ExampleWLib, 'R')"
+                @click="$emit('eval', this.exampleWLib, 'R')"
               >
                 <i class="fa fa-play"></i>
               </button>
@@ -566,6 +567,8 @@ export default {
   },
   data() {
     return {
+      methodKeys:['Usage','Argument','Example','Order','Alias','methodId',
+      "Methods","Value"],
       totalCount:0,
       packageCount:0,
       methodCount:0,
@@ -601,6 +604,8 @@ export default {
       totalPages: 0,
       search: '',
       packageName: '',
+      usageWLib: '',
+      exampleWLib: '',
     }
   },
 
@@ -684,7 +689,6 @@ export default {
       this.getPackageMethods(name)
     },
 
-
     showMethod(name) {
       this.getMethod(this.packageName, name)
     },
@@ -758,7 +762,6 @@ export default {
       this.$http
         .get(BASE  + `/cran-package-detail?package=${name}`)
         .then(({ body }) => {
-          console.log(body)
           this.methods = body.methods
           this.packageInfo = this.sortPackage(body.package)
           this.packageProjects = body.projects
@@ -790,7 +793,6 @@ export default {
       this.$http
         .get(BASE +`/cran-method-detail?package=${packageName}&method=${method}`)
         .then(({ body }) => {
-          console.log(body)
           this.methods = body.package.methods
           var breadcrumb = [
             {
@@ -812,9 +814,9 @@ export default {
           }
           
           if (body.method) {
-            this.methodInfo = this.sortMethod(body.method)
-            this.methodInfo.UsageWLib = `library(${this.packageName}) \n${this.methodInfo.Usage}`
-            this.methodInfo.ExampleWLib = `library(${this.packageName}) \n${this.methodInfo.Example}`
+            this.methodInfo = this.sortMethod( body.method )
+            this.usageWLib = `library(${this.packageName}) \n${this.methodInfo.Usage}`
+            this.exampleWLib = `library(${this.packageName}) \n${this.methodInfo.Example}`
             breadcrumb.push({
               state: 'method-detail',
               name: this.methodInfo.Name
@@ -961,10 +963,10 @@ export default {
         orderedAndNamedKeys[ index ] = key.replace(/^./, key[0].toUpperCase())
         sortedMethodInfo[ orderedAndNamedKeys[ index ] ] = mth[ key ]
       })
+      
       return sortedMethodInfo
-    }
+    },
 
-    
   }
 }
 
