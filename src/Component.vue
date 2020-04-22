@@ -461,12 +461,14 @@
               <button
                 class="btn btn-sm btn-success"
                 @click="$emit('eval', methodInfo.usageWLib, 'R')"
+                title='Run code in new cell'
               >
                 <i class="fa fa-play"></i>
               </button>
               <button
                 class="btn btn-sm btn-success"
                  v-clipboard="methodInfo.Usage"
+                 title='Copy'
               >
                 <i class="fas fa-copy"></i>
               </button>
@@ -516,12 +518,14 @@
               <button
                 class="btn btn-sm btn-success"
                 @click="$emit('eval', methodInfo.exampleWLib, 'R')"
+                title='Run code in new cell'
               >
                 <i class="fa fa-play"></i>
               </button>
               <button
                 class="btn btn-sm btn-success"
                 v-clipboard="methodInfo.Example"
+                title='Copy'
               >
                 <i class="fas fa-copy"></i>
               </button>
