@@ -464,6 +464,12 @@
               >
                 <i class="fa fa-play"></i>
               </button>
+              <button
+                class="btn btn-sm btn-success"
+                 v-clipboard="methodInfo.Usage"
+              >
+                <i class="fas fa-copy"></i>
+              </button>
             </h4>
             <pre v-html="methodInfo.Usage"></pre>
           </div>
@@ -513,6 +519,12 @@
               >
                 <i class="fa fa-play"></i>
               </button>
+              <button
+                class="btn btn-sm btn-success"
+                v-clipboard="methodInfo.Example"
+              >
+                <i class="fas fa-copy"></i>
+              </button>
             </h4>
             <pre v-html="methodInfo.Example"></pre>
           </div>
@@ -556,6 +568,8 @@
 const BASE = "https://appdev.melda.io/api/rkb" 
 const API = "https://kbdev.melda.io/"
 const SERVER = "https://appdev.melda.io/" 
+
+import Clipboard from 'v-clipboard'
 
 export default {
   name: 'MeldaKnowledgeBase',
@@ -657,6 +671,10 @@ export default {
       window.open(url,"_blank")
     },
 
+    copyText(text){
+
+    },
+    
     setCount( count) {
       if( count < 1000 ) {
         return count
