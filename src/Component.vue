@@ -119,7 +119,7 @@
               >
                 <td
                   class="text-primary package-name"
-                  style="max-width: 1px; text-align:left;" 
+                  style="width: 60px"
                   :title="methodItem.name"
                 >
                 {{ methodItem.name}}
@@ -132,9 +132,9 @@
                 </td>
                 <td
                 class="text-primary package-name"
-                  style="max-width: 1px; text-align:right;"
+                  style="max-width: 1px; text-align:right;width: 35px"
                   :title="methodItem.packageName"
-                  v-html="methodItem.packageName "
+                  v-html="methodItem.packageName"
                 >
                 </td>
 
