@@ -624,7 +624,9 @@ export default {
       packageName: '',
     }
   },
-
+  beforeMount(){
+    this.searchInHome();
+  },
   updated() {
     this.fixMeldaKbUrls()
   },
@@ -936,19 +938,19 @@ export default {
     },
 
     searchInHome(){
-         this.$http.get(API +'/search?q=' + this.search + '&in=package' 
+         this.$http.get(API +'search?q=' + this.search + '&in=package'
          + "&size=" + this.size)
         .then( ({body}) => {
           this.packages = body.packages;
           this.packageCount = body.count
         })
-        this.$http.get(API +'/search?q=' + this.search + '&in=method'
+        this.$http.get(API +'search?q=' + this.search + '&in=method'
         + "&size=" + this.size)
         .then( ({body}) => {
           this.searchMethods = body.methods;
           this.methodCount = body.count
         })        
-        this.$http.get(API +'/search?q=' + this.search + '&in=author' 
+        this.$http.get(API +'search?q=' + this.search + '&in=author' 
         + "&size=" + this.size)
         .then( ({body}) => {
           this.authors = body.packages;
