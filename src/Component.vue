@@ -210,40 +210,40 @@
             @keydown.enter="searchAll( searchIn = 'method' )"
             v-model="search"
           />
-            <table
-            class="table table-hover package-table">
-            <thead>
-              <tr>
-                <th>Method Name</th>
-                <th>Method Description</th>
-                <th>Package</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="methodItem in searchMethods"
-                @click="getMethod(methodItem.packageName,methodItem.name)"
+        <table
+          class="table table-hover package-table">
+          <thead>
+            <tr>
+              <th>Method Name</th>
+              <th>Method Description</th>
+              <th>Package</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="methodItem in searchMethods"
+              @click="getMethod(methodItem.packageName,methodItem.name)"
+            >
+              <td
+                class="text-primary package-name"
+                style="width: 60px"
               >
-                <td
-                  class="text-primary package-name"
-                  :title="methodItem.name"
-                >
-                  {{ (methodItem.name) }}
-                </td>
-                <td
-                  class="package-version nowrap"
-                  
-                  :title="(methodItem.description)"
-                >
-                  {{ (methodItem.title) }}
-                </td>
-                  <td class="text-primary package-name"
-                  :title="methodItem.packageName"
-                  v-html="methodItem.packageName"
-                ></td>
-              </tr>
-            </tbody>
+                {{ (methodItem.name) }}
+              </td>
+              <td
+                class="nowrap package-description"
+                style="max-width: 1px"
+                :title="(methodItem.description)"
+              >
+                {{ (methodItem.title) }}
+              </td>
+                <td class="text-primary package-name"
+                style="width:35px"
+                :title="methodItem.packageName"
+                v-html="methodItem.packageName"
+              ></td>
+            </tr>
+          </tbody>
           </table>
           <button type="button" 
           class="btn btn-block btn-warning"
@@ -315,7 +315,7 @@
               v-model="search"
             />
             <table
-            class="table table-borderless table-hover package-table">
+            class="table table-hover package-table">
             <thead>
               <tr>
                 <th>Name</th>
