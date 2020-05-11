@@ -8,7 +8,7 @@
       <div  v-if="state != 'search-all'">
         <nav aria-label = "breadcrumb">
           <ol class="breadcrumb">
-          <li class="breadcrumb-item"
+          <a class="breadcrumb-item"
               v-for="(item,index) in breadcrumb"
               @click="setState(item.state)"
               v-bind:class = "{ 'active': index + 1 == breadcrumb.length }"
@@ -16,7 +16,7 @@
               <a>
              {{ item.name }}
               </a>
-          </li>
+          </a>
           </ol>
         </nav>
         </a>
@@ -693,18 +693,24 @@ export default {
       this.state = state
       if (state == 'search-all')
         this.breadcrumb = this.breadcrumb.filter(p => p.state == 'search-all')
+
       else if (state == 'package-detail')
         this.breadcrumb = this.breadcrumb.filter(
-          p => p.state == 'package-detail' || p.state == 'search-package-only' || 
+          p => p.state == 'package-detail' ||
           p.state == 'search-method-only' || p.state == 'search-all' ||
-          p.state == 'search-author-only'
-        )
-      else if (state == "method-detail")
+          p.state == 'search-author-only')
+
+      else if ( state == "search-method-only" )
         this.breadcrumb = this.breadcrumb.filter(
-          p => p.state == 'package-detail' || p.state == 'search-package-only' || 
-          p.state == 'search-method-only' || p.state == 'search-all' ||
-          p.state == 'search-author-only'
-        )
+          p => p.state == 'search-method-only' || p.state == 'search-all')
+      
+      else if ( state == "search-package-only" )
+        this.breadcrumb = this.breadcrumb.filter(
+          p => p.state == 'search-package-only' || p.state == 'search-all')
+      
+      else if ( state == "search-author-only" )
+        this.breadcrumb = this.breadcrumb.filter(
+          p => p.state == 'search-author-only' || p.state == 'search-all')
     },
 
     showPackageMethods(name) {
