@@ -4,7 +4,7 @@
       <i class="fa fa-cog fa-spin"></i>
     </div>
     
-    <div v-else>
+    <div  v-else>
       <div  v-if="state != 'search-all'">
         <nav aria-label = "breadcrumb">
           <ol class="breadcrumb">
@@ -22,17 +22,17 @@
         </a>
       </div>
 
-      <div style="clear: both"></div>
-
       <div ref="main">
-        <div class="table-responsive" v-if="state === 'search-all'">
-          <input
+        <div class="raw table-responsive" v-if="state === 'search-all'">
+          <div>
+            <input
             type="text"
             placeholder="Search in Packages, Methods, Authors"
             class="form-control form-control-md mb-3"
             @keydown.enter="searchInHome()"
             v-model="search"
           />
+          </div>
           
           <div class ="card search-card" v-if=" packages.length != 0 ">
             <table class="table table-borderless" style="borderless">
@@ -148,8 +148,8 @@
               <tbody>
                 <tr class="table-active">
                   <th style="text-align:left;">Authors
-                      <span class="badge badge-pill badge-success">
-                    {{ setCount(authorCount) }}
+                    <span class="badge badge-pill badge-success">
+                      {{ setCount(authorCount) }}
                     </span>
                   </th>
                   <td  class="package-name"
@@ -202,65 +202,102 @@
           </div>
         </div>
         
-        <div v-else-if="state === 'search-method-only'">
-          <input
-            type="text"
-            placeholder="Search in Methods"
-            class="form-control form-control-md mb-3"
-            @keydown.enter="searchAll( searchIn = 'method' )"
-            v-model="search"
-          />
-        <table
-          class="table table-hover package-table">
-          <thead>
-            <tr>
-              <th>Method Name</th>
-              <th>Method Description</th>
-              <th>Package</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="methodItem in searchMethods"
-              @click="getMethod(methodItem.packageName,methodItem.name)"
-            >
-              <td
-                class="text-primary package-name"
-                style="width: 60px"
+        <div class="container" v-else-if="state === 'search-method-only'">
+          <div class="row">
+            <div class="col" style="padding:0px">
+              <input
+                type="text"
+                placeholder="Search in Methods"
+                class="form-control form-control-md mb-3"
+                @keydown.enter="searchAll( searchIn = 'method' )"
+                v-model="search"
+              />
+            </div>
+
+           <div class="col-md-auto" style="padding:0px">
+              <select class="form-control" v-model="sortBy">
+                <option value="Most Related">Most Related</option>
+                <option value="date">Most Updated</option>
+                <option value="-date">Least Recently Updated</option>
+                <option value="name">Alphabetically Ascending</option>
+                <option value="-name">Alphabetically Descending</option>
+              </select> 
+            </div>
+          </div>
+          
+          <div class="row">
+            <table class="table table-hover package-table">
+            <thead>
+              <tr>
+                <th>Method Name</th>
+                <th>Method Description</th>
+                <th>Package</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="methodItem in searchMethods"
+                @click="getMethod(methodItem.packageName,methodItem.name)"
               >
-                {{ (methodItem.name) }}
-              </td>
-              <td
-                class="nowrap package-description"
-                style="max-width: 1px"
-                :title="(methodItem.description)"
-              >
-                {{ (methodItem.title) }}
-              </td>
-                <td class="text-primary package-name"
-                style="width:35px"
-                :title="methodItem.packageName"
-                v-html="methodItem.packageName"
-              ></td>
-            </tr>
-          </tbody>
-          </table>
-          <button type="button" 
-          class="btn btn-block btn-warning"
-          @click="searchHandler(searchIn = 'method')"
-          v-if = showButton
-          style="background-color:#ff7b00"
-          >Load More</button>
+                <td
+                  class="text-primary package-name"
+                  style="width: 60px"
+                >
+                  {{ (methodItem.name) }}
+                </td>
+                <td
+                  class="nowrap package-description"
+                  style="max-width: 1px"
+                  :title="(methodItem.description)"
+                >
+                  {{ (methodItem.title) }}
+                </td>
+                  <td class="text-primary package-name"
+                  style="width:35px"
+                  :title="methodItem.packageName"
+                  v-html="methodItem.packageName"
+                ></td>
+              </tr>
+            </tbody>
+            </table>
+          </div>
+          
+          <div class="row"> 
+            <button type="button" 
+            class="btn btn-block btn-warning"
+            @click="searchHandler(searchIn = 'method')"
+            v-if = showButton
+            style="background-color:#ff7b00"
+            >Load More
+            </button>
+        
+          </div>
         </div>
         
-        <div v-else-if="state === 'search-package-only'">
-          <input
-            type="text"
-            placeholder="Search in Packages"
-            class="form-control form-control-md mb-3"
-            @keydown.enter="searchAll(searchIn = 'package' )"
-            v-model="search"
-          />
+        <div class="container" v-else-if="state === 'search-package-only'">
+          <div class="row">
+            <div class="col" style="padding:0px">
+              <input
+                type="text"
+                placeholder="Search in Packages"
+                class="form-control form-control-md mb-3"
+                @keydown.enter="searchAll(searchIn = 'package' )"
+                v-model="search"
+              />
+            </div>
+            
+           <div class="col-md-auto" style="padding:0px">
+              <select class="form-control" v-model="sortBy">
+                <option value="Most Related">Most Related</option>
+                <option value="date">Most Updated</option>
+                <option value="-date">Least Recently Updated</option>
+                <option value="name">Alphabetically Ascending</option>
+                <option value="-name">Alphabetically Descending</option>
+              </select>
+            </div>
+          </div>
+          
+         <div class="row">
           <table
             class="table table-hover package-table">
             <thead>
@@ -298,6 +335,7 @@
               </tr>
             </tbody>
           </table>
+         </div>
           <button type="button" 
           class="btn btn-block btn-warning"
           @click="searchHandler(searchIn = 'package')"
@@ -306,16 +344,30 @@
           >Load More</button>
         </div>
       
-      <div v-else-if="state === 'search-author-only'">
-            <input
-              type="text"
-              placeholder="Search in Authors"
-              class="form-control form-control-md mb-3"
-              @keydown.enter="searchAll( searchIn = 'author' )"
-              v-model="search"
-            />
-            <table
-            class="table table-hover package-table">
+        <div class="container" v-else-if="state === 'search-author-only'">
+          <div class="row">
+            <div class="col" style="padding:0px">
+              <input
+                type="text"
+                placeholder="Search in Authors"
+                class="form-control form-control-md mb-3"
+                @keydown.enter="searchAll( searchIn = 'author' )"
+                v-model="search"
+              />
+            </div>
+            
+           <div class="col-md-auto" style="padding:0px">
+              <select class="form-control" v-model="sortBy">
+                <option value="Most Related">Most Related</option>
+                <option value="date">Most Updated</option>
+                <option value="-date">Least Recently Updated</option>
+                <option value="name">Alphabetically Ascending</option>
+                <option value="-name">Alphabetically Descending</option>
+              </select>
+           </div>
+          </div>
+          <div class="row">
+            <table class="table table-hover package-table">
             <thead>
               <tr>
                 <th>Name</th>
@@ -347,13 +399,18 @@
                 </td>
               </tr>
             </tbody>
-          </table>
-          <button type="button" 
-          class="btn btn-block btn-warning"
-          @click="searchHandler(searchIn = 'author')"
-          style="background-color:#ff7b00"
-          v-if = showButton
-          >Load More</button>
+            </table>
+          </div>
+          
+          <div class="row">
+            <button type="button" 
+              class="btn btn-block btn-warning"
+              @click="searchHandler(searchIn = 'author')"
+              style="background-color:#ff7b00"
+              v-if = showButton
+            >Load More
+            </button>
+          </div>
         </div>
         
         <div class="table-responsive" v-else-if="state === 'package-detail'">
@@ -577,12 +634,14 @@ import Clipboard from 'v-clipboard'
 
 export default {
   name: 'MeldaKnowledgeBase',
+
   props:{
     user:{
       default:null,
       required:false
     }
   },
+
   data() {
     return {
       methodKeys:['Usage','Argument','Example','Order','Alias','methodId',
@@ -622,13 +681,32 @@ export default {
       totalPages: 0,
       search: '',
       packageName: '',
+      sortBy:'Most Related',
     }
   },
+
   beforeMount(){
     this.searchInHome();
   },
+
   updated() {
     this.fixMeldaKbUrls()
+  },
+
+  watch:{
+    sortBy(){
+      if (this.state == "search-package-only"){
+        this.searchAll(this.search, this.searchIn="package" , this.sortBy = this.sortBy)
+
+      }else if ( this.state == "search-method-only") {
+        console.log("Search is working")
+        this.searchAll(this.search, this.searchIn = "method" , this.sortBy = this.sortBy)
+
+      }else if ( this.state == "search-author-only")
+        this.searchAll(this.search, this.this.searchIn="author" , this.sortBy = this.sortBy)
+    
+    }
+
   },
   
   methods: {
@@ -675,10 +753,6 @@ export default {
     openUrl(url){
       url = SERVER + url
       window.open(url,"_blank")
-    },
-
-    copyText(text){
-
     },
     
     setCount( count) {
@@ -863,13 +937,14 @@ export default {
         })
     },
 
-    searchAll(searchIn = "all" ){
+    searchAll( searchIn ){
       this.page = 1
       this.isSearching = true
       this.loading = true
+      searchIn = this.searchIn
         this.$http
-        .get(API + '/search?q=' + this.search + '&in=' + searchIn +'&size=' + this.size
-        +"&page=" + this.page)
+        .get(API + '/search?q=' + this.search + '&in=' + this.searchIn +'&size=' + this.size
+        +"&page=" + this.page + "&sort=" + this.sortBy)
         .then( ({body}) => {
           var breadcrumb = [
             {
