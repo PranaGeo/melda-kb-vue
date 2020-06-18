@@ -3,7 +3,9 @@ var webpack = require('webpack')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
+
 module.exports = {
+  
   entry: './test/main.js',
   output: {
       path: path.resolve("./dist/"),
@@ -13,30 +15,56 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
+        loader: "vue-loader"
+      },
+      {
+        test: /\.(woff2?|eot|ttf|svg)$/,
+        loader: 'url-loader',
         options: {
-          loaders: {
-            css: ExtractTextPlugin.extract({
-                use: 'css-loader',
-                fallback: 'vue-style-loader' // <- this is a dep of vue-loader, so no need to explicitly install if using npm3
-            }),
-          },
-          // other vue-loader options go here
-          // extractCSS: true,
+          limit: 1 * 1024 ** 1,
+          outputPath: "fonts/",
         }
       },
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/
+        test: /\.(png|jpe?g|gif)$/,
+        loader: 'url-loader',
+        options: {
+          limit: 1 * 1024 ** 1,
+          outputPath: "images/",
+        }
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]?[hash]'
-        }
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          "css-loader"
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          "less-loader",
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          "sass-loader",
+        ]
+      },
+      {
+        test: /\.styl(us)?$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'stylus-loader',
+        ]
       }
+
     ]
   },
   resolve: {
