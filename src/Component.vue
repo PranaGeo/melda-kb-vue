@@ -217,7 +217,7 @@
            <div class="col-md-auto" style="padding:0px">
               <select class="form-control" v-model="sortBy">
                 <option value="Most Related">Most Related</option>
-                <option value="date">Most Updated</option>
+                <option value="date">Most Recently Updated</option>
                 <option value="-date">Least Recently Updated</option>
                 <option value="name">Alphabetically Ascending</option>
                 <option value="-name">Alphabetically Descending</option>
@@ -289,7 +289,7 @@
            <div class="col-md-auto" style="padding:0px">
               <select class="form-control" v-model="sortBy">
                 <option value="Most Related">Most Related</option>
-                <option value="date">Most Updated</option>
+                <option value="date">Most Recently Updated</option>
                 <option value="-date">Least Recently Updated</option>
                 <option value="name">Alphabetically Ascending</option>
                 <option value="-name">Alphabetically Descending</option>
@@ -305,6 +305,7 @@
                 <th>Package Name</th>
                 <th>Description</th>
                 <th>Version</th>
+                <th> Date </th>
               </tr>
             </thead>
             <tbody>
@@ -332,6 +333,14 @@
                 >
                   {{ (packageItem.version) }}
                 </td>
+                <td
+                  class="package-version nowrap"
+                  style="width: 35px"
+                  :title="(packageItem.published)"
+                >
+                    {{ (packageItem.published) }}
+                </td>
+
               </tr>
             </tbody>
           </table>
@@ -359,7 +368,7 @@
            <div class="col-md-auto" style="padding:0px">
               <select class="form-control" v-model="sortBy">
                 <option value="Most Related">Most Related</option>
-                <option value="date">Most Updated</option>
+                <option value="date">Most Recently Updated</option>
                 <option value="-date">Least Recently Updated</option>
                 <option value="name">Alphabetically Ascending</option>
                 <option value="-name">Alphabetically Descending</option>

@@ -6,10 +6,9 @@ var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 module.exports = {
   entry: './test/main.js',
   output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
-    filename: 'melda-test.js'
-  },
+      path: path.resolve("./dist/"),
+      filename:"bundle.js",
+      publicPath: "/dist/"  },
   module: {
     rules: [
       {
