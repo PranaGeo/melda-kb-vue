@@ -808,11 +808,13 @@ export default {
       switch ( searchIn ) {
       case "method":
         if( this.showButton ){
-          this.page = Math.floor(this.searchMethods.length / 5)  + 1
+          this.page =  this.page + 1
+          this.size = 30
         }
+        
         this.$http
         .get(API + '/search?q=' + this.search + '&in=' + searchIn 
-        +"&page=" + this.page)
+        + "&size=" + this.size + "&page=" + this.page )  
         .then( ({body}) => {
           body.methods.forEach((pkg) => {
                 this.searchMethods.push(pkg);
@@ -827,11 +829,12 @@ export default {
         break;
       case "package":
          if( this.showButton ){
-          this.page = Math.floor(this.packages.length / 5)  + 1
+          this.page =  this.page + 1
+          this.size = 30
         }
         this.$http
         .get(API + '/search?q=' + this.search + '&in=' + searchIn 
-        +"&page=" + this.page)
+        + "&size=" + this.size + "&page=" + this.page )  
         .then( ({body}) => {
           body.packages.forEach((func) => {
                 this.packages.push(func);
@@ -843,14 +846,17 @@ export default {
         }else{
           this.showButton = false;
         }
+        
         break;
       case "author":
-        if( this.showButton ){
-          this.page = Math.floor(this.authors.length / 5)  + 1
+         if( this.showButton ){
+          this.page =  this.page + 1
+          this.size = 30
         }
+        
         this.$http
         .get(API + '/search?q=' + this.search + '&in=' + searchIn 
-        +"&page=" + this.page)
+        + "&size=" + this.size + "&page=" + this.page )  
         .then( ({body}) => {
           body.packages.forEach((auth) => {
                 this.authors.push(auth);
@@ -1088,7 +1094,6 @@ export default {
 section {
   background:whitesmoke;
 }
-
 
 .loading {
   text-align: center;
