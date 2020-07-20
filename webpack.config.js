@@ -1,16 +1,29 @@
-var path = require('path')
-var webpack = require('webpack')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const path = require("path");
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 
 module.exports = {
-  
-  entry: './test/main.js',
+  mode: "development",
+
+  entry: "./src/index.js",
+
+  devServer: {
+    historyApiFallback: true
+  },
+
   output: {
-      path: path.resolve("./dist/"),
-      filename:"bundle.js",
-      publicPath: "/dist/"  },
+    path: path.resolve("./dist/"),
+    filename: "bundle.js",
+    publicPath: "/dist/"
+  },
+
+  resolve: {
+    alias: {
+      vue: "vue/dist/vue.js", // Vue toastr needs this
+    }
+  },
+
   module: {
     rules: [
       {
@@ -64,58 +77,11 @@ module.exports = {
           'stylus-loader',
         ]
       }
-
     ]
   },
-  resolve: {
-    alias: {
-      'vue$': 'vue/dist/vue.esm.js'
-    }
-  },
-  devServer: {
-    historyApiFallback: true,
-    noInfo: true
-  },
-  performance: {
-    hints: false
-  },
-  devtool: '#eval-source-map',
+
   plugins: [
-    new ExtractTextPlugin("melda-test.css"),
+    new VueLoaderPlugin,
+    new MomentLocalesPlugin
   ]
-}
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map'
-  module.exports.output.filename = 'melda-test.min.js'
-  module.exports.entry = './build/production.js'
-  // http://vue-loader.vuejs.org/en/workflow/production.html
-  module.exports.plugins = (module.exports.plugins || []).concat([
-    // minified
-    // CSS
-    new OptimizeCssAssetsPlugin({
-      assetNameRegExp: /\.css$/g,
-      cssProcessor: require('cssnano'),
-      cssProcessorOptions: { discardComments: { removeAll: true } },
-      canPrint: true
-    }),
-    new ExtractTextPlugin("melda-test.min.css"),
-
-    // JS
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      include: /\.min\.js$/,
-      minimize: true
-    })
-  ])
-}
+};
