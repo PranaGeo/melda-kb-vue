@@ -77,8 +77,10 @@ export default new Vuex.Store({
     
     setPackageItemResult: (state,packageInfo) => state.packageInfo = packageInfo,
     
+    setMethodItemResult: (state,methodInfo) => state.methodInfo = methodInfo,
+
     setPackageMethods: (state,packageMethods) => state.packageMethods = packageMethods,
-    
+
     // setTasks: (state, object) => state.object = object
   },
 
@@ -119,9 +121,11 @@ export default new Vuex.Store({
       async getMethodItem ({commit}, {packageName,methodName}) {
         try{
           let url = setBaseUrl (packageName,methodName)
-          let response = await axios.get( url )
+          let response = await axios.get(url)
+          response.data.method.package =response.data.package.name
   
-          commit('setMethodItemResult', response.data)
+          commit('setMethodItemResult', response.data.method)
+          commit('setPackageItemResult', response.data.package)
         } catch(error) {
           console.error(error)
         }
@@ -255,5 +259,24 @@ export default new Vuex.Store({
 
     getPackageMethods: state => state.packageMethods,
 
+    getSortedMethodInfo: state => {
+      let orderedKeys = ["package",
+                        "alias",
+                        "title",
+                        "description",
+                        "usage",
+                        "format",
+                        "details",
+                        "source",
+                        "references",
+                        "keyword"];
+      let sortedMethodInfo = {}
+
+      orderedKeys.forEach( (key,index)=> {
+        orderedKeys[ index ] = key.replace(/^./, key[0].toUpperCase())
+        sortedMethodInfo[ orderedKeys[ index ] ] = state.methodInfo[ key ]
+      })
+      return sortedMethodInfo
+    }
   }
 })

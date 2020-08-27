@@ -31,9 +31,12 @@
                 <tbody>
                     <tr
                     v-for="methodItem in packageMethods"
-                    @click="showMethod(methodItem.name)"
-                    :title="methodItem.name"
-                    >
+                    @click="$store.dispatch('setRoute', 
+                    {
+                    'to':to, 
+                    'packageName':packageName,
+                    'methodName':methodItem.name 
+                    })">
                     <td class="text-primary package-name">
                         {{ (methodItem.name) }}
                     </td>

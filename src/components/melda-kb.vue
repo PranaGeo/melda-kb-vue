@@ -67,16 +67,18 @@
         
         <div class="table-responsive" v-else-if="route === 'package-detail'">
           <package-detail :packageInfo="getSortedPackageInfo"
-                          :packageMethods="getPackageMethods"
+                          :packageMethods="packageMethods"
+                          :to="'method-detail'"
                             
           > 
-
+          
           </package-detail>
         </div>
 
         <div v-else-if="route === 'method-detail'">
-          <h2> Method Detail page</h2>
-          <method-detail> </method-detail>            
+          <method-detail :methodInfo="getSortedMethodInfo"> 
+            
+          </method-detail>            
         </div>
     </div>
   </div>
@@ -117,8 +119,29 @@ export default {
   },
 
   computed : {
-    ...mapState(["route","packages","packageCount","methods","methodCount","authors","authorCount"]),
-    ...mapGetters(["getPackages","getMethods","getAuthors","getSlicedPackages","getSlicedMethods","getSlicedAuthors","getSortedPackageInfo","getPackageMethods"]),
+    ...mapState([
+      "route",
+      "packages",
+      "packageCount",
+      "methods",
+      "methodCount",
+      "authors",
+      "authorCount",
+      "packageMethods",
+      "sortedMethodInfo"
+    ]),
+
+    ...mapGetters([
+      "getPackages",
+      "getMethods",
+      "getAuthors",
+      "getSlicedPackages",
+      "getSlicedMethods",
+      "getSlicedAuthors",
+      "getSortedPackageInfo",
+      "getSortedMethodInfo"
+      ]),
+
 
     search: {
       get () {
