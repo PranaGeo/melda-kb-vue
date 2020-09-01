@@ -46,16 +46,22 @@
                         style="max-width: 1px"
                         v-html="(methodItem.description)"
                     ></td>
-                    </tr>
-                </tbody>
-            </table>
+                </tr>
+            </tbody>
+        </table>
 
     </div>  
 </template>
 
 <script>
 export default {
-    props:	["packageInfo","packageMethods"],
+    props:	["packageInfo","packageMethods","to"],
+    
+    computed: {
+        packageName() {
+            return this.packageInfo["Package Name"]
+        }
+    }
 
 }
 </script>

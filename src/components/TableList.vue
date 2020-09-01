@@ -33,8 +33,8 @@
 				@click="$store.dispatch('setRoute', 
 				{
 				'to':to, 
-				'packageItem':item.packageName,
-				'methodItem':item.name 
+				'packageName':item.Name,
+				'methodName':item.name 
 				})"> 
 					<th v-for="(value,index) in item" :key="index" :title="value" v-html="value">  </th>
 				</tr>

@@ -6,17 +6,29 @@
     
     <div  v-else>
       <div  v-if="route != 'search-all'">
-         <nav>BREADCRUMB AREA</nav>
+        <nav aria-label = "breadcrumb">
+          <ol class="breadcrumb">
+            <li>
+              <a class="breadcrumb-item"
+                  v-for="(item,index) in breadcrumb"
+                  @click="$store.dispatch('setRoute',{'to':item.route})"
+                  v-bind:class = "{ 'active': index + 1 == breadcrumb.length }"
+                  >
+                {{ item.name }}
+              </a>
+            </li>
+          </ol>
+        </nav>
       </div>
 
       <div ref="main">
         <div v-if="route === 'search-all'">
           <input type="text"
-                  placeholder="Search in Packages, Methods, Authors"
-                  class="form-control form-control-md mb-3"
-                  @keydown.enter="searchInHome()"
-                  v-model="search"
-          />
+                placeholder="Search in Packages, Methods, Authors"
+                class="form-control form-control-md mb-3"
+                @keydown.enter="$store.dispatch('setRoute',{'to':'search-all'})"
+                v-model="search"
+          >
 
           <Table :tableName="'Packages'"
                   :tableData="getSlicedPackages"
@@ -128,7 +140,7 @@ export default {
       "authors",
       "authorCount",
       "packageMethods",
-      "sortedMethodInfo"
+      "breadcrumb"      
     ]),
 
     ...mapGetters([
@@ -139,7 +151,7 @@ export default {
       "getSlicedMethods",
       "getSlicedAuthors",
       "getSortedPackageInfo",
-      "getSortedMethodInfo"
+      "getSortedMethodInfo",
       ]),
 
 

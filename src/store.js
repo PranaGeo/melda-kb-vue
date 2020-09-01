@@ -6,6 +6,56 @@ Vue.use(Vuex);
 const BASE = "https://appdev.melda.io/api/rkb" 
 const API = "https://kbdev.melda.io/"
 const SERVER = "https://dev.melda.io/" 
+const breadcrumb = [
+  {
+    name: 'Home',
+    route: 'search-all',
+    id:1
+  },
+  {
+    name: 'Method List',
+    route: 'search-method-only',
+    id:2,
+    parentId:1
+  },
+  {
+    name: 'Package List',
+    route: 'search-package-only',
+    id:3,
+    parentId:1
+  },
+  {
+    name: 'Author List',
+    route: 'search-author-only',
+    id:4,
+    parentId:1
+  },
+  {
+    name: 'Method Detail',
+    route: 'method-detail',
+    id:5,
+    parentId:6
+  },
+  {
+    name: 'Package Detail',
+    route: 'package-detail',
+    id:6,
+    parentId:3
+  },
+]
+
+function  getBreadcrumb(to) {
+  let crumbs = []
+  let current = getCurrentBreadcrumbItem(to)
+  crumbs.splice(0,0,current)
+  
+  while(current.parentId) {
+    let parent = getParentBreadcrumbItem(current)  
+    crumbs.splice(0,0,parent)
+    current = parent
+  }
+  return crumbs;
+}
 
 function setApiUrl(search,searchIn) {
   let size = 30
@@ -25,11 +75,16 @@ function setCount(count) {
   return count < 1000 ? count : Math.round(count/ 1000) + "K" 
 }
 
+function getCurrentBreadcrumbItem(route) {
+  return breadcrumb.filter(crumb => crumb.route == route)[0]
+}
+
+function getParentBreadcrumbItem(current) {
+  return breadcrumb.filter(crumb => crumb.id == current.parentId)[0]
+}
+
 export default new Vuex.Store({
   state: {
-    methodKeys:['Usage','Argument','Example','Order','Alias','methodId',
-    "Methods","Value","usageWLib","exampleWLib"],
-    totalCount:0,
     packageCount:0,
     methodCount:0,
     authorCount:0,
@@ -45,12 +100,7 @@ export default new Vuex.Store({
     searchMethods: [],
     packageProjects: [],
     methodProjects: [],
-    breadcrumb: [
-      {
-        name: 'Home',
-        state: 'search-all'
-      }
-    ],
+    breadcrumb:[],
     packageMethods: [],
     totalPages: 0,
     search: '',
@@ -81,7 +131,8 @@ export default new Vuex.Store({
 
     setPackageMethods: (state,packageMethods) => state.packageMethods = packageMethods,
 
-    // setTasks: (state, object) => state.object = object
+    setCurrentBreadcrumb: (state,breadcrumb) => state.breadcrumb = breadcrumb,
+    
   },
 
   actions: {
@@ -142,41 +193,56 @@ export default new Vuex.Store({
         }
       },
 
-
-      test( {commit}, test){
-        console.log("I GOT YOU")
-      },
-
-      setRoute ({commit}, {to, packageName, methodName}) {
+      setRoute ({commit, dispatch}, {to, packageName, methodName}) {
         switch(to) {
         case "search-all":
-          this.dispatch('search','all' )
+          dispatch('search','package' )
+          dispatch('search','method' )
+          dispatch('search','author' )
           commit("setCurrentRoute","search-all")
+          dispatch('setBreadCrumb',{to})
           break;
         case "search-package-only":
-          this.dispatch('search',"package")
+          dispatch('search',"package")
           commit("setCurrentRoute", "search-package-only")
+          dispatch('setBreadCrumb',{to})
           break;
         case "search-method-only":
-          this.dispatch('search',"method")
+          dispatch('search',"method")
           commit("setCurrentRoute","search-method-only")
+          dispatch('setBreadCrumb',{to})
           break;
         case "search-author-only":
-          this.dispatch('search',"author")
+          dispatch('search',"author")
           commit("setCurrentRoute","search-author-only")
+          dispatch('setBreadCrumb',{to})
           break;
         case "package-detail":
-          this.dispatch('getPackageItem', packageName)
+          dispatch('getPackageItem', packageName)
           commit("setCurrentRoute","package-detail")
+          dispatch('setBreadCrumb',{to,packageName})
           break;
         case "method-detail":
-          this.dispatch('getMethodItem', {packageName, methodName})
+          dispatch('getMethodItem', {packageName, methodName})
           commit("setCurrentRoute","method-detail")
+          dispatch('setBreadCrumb',{to,packageName,methodName})
           break;
         }
       },
 
-      // async setBreadCrumb ({commit}, searchIn)
+      setBreadCrumb ({commit}, {to,packageName,methodName}) {
+        let breadcrumb = getBreadcrumb(to)
+        if(packageName){
+          breadcrumb[breadcrumb.length - 1].name = packageName
+        }
+
+        if(packageName && methodName){
+          breadcrumb[breadcrumb.length - 2].name = packageName
+          breadcrumb[breadcrumb.length - 1].name = methodName
+        }
+        commit("setCurrentBreadcrumb",breadcrumb)
+      },
+
     },
 
   getters: {
@@ -239,12 +305,44 @@ export default new Vuex.Store({
     },
     
     getSortedPackageInfo: state => {
-      let orderedKeys= ["name","description","version","depends","imports",
-      "suggests","published","author","maintainer","bugreports","license",
-      "url","needscompilation","materials","inviews","linkingto","cranchecks"]
-      let namedKeys= ["Package Name","Description", "Version","Depends","Imports",
-      "Suggests", "Published", "Author", "Maintainer", "Bug Reports","License",
-      "Url", "Needs Compilation", "Materials", "In views", "Linking to", "CRAN Checks"]
+      let orderedKeys = [
+        "name",
+        "description",
+        "version",
+        "depends",
+        "imports",
+        "suggests",
+        "published",
+        "author",
+        "maintainer",
+        "bugreports",
+        "license",
+        "url",
+        "needscompilation",
+        "materials",
+        "inviews",
+        "linkingto",
+        "cranchecks"
+      ]
+      let namedKeys = [
+        "Package Name",
+        "Description",
+        "Version",
+        "Depends",
+        "Imports",
+        "Suggests",
+        "Published",
+        "Author",
+        "Maintainer",
+        "Bug Reports",
+        "License",
+        "Url",
+        "Needs Compilation",
+        "Materials",
+        "In views",
+        "Linking to",
+        "CRAN Checks"
+      ]
       let unsortedKeys  = Object.keys(state.packageInfo)
       let sortedPackageInfo = {}
 
@@ -260,16 +358,18 @@ export default new Vuex.Store({
     getPackageMethods: state => state.packageMethods,
 
     getSortedMethodInfo: state => {
-      let orderedKeys = ["package",
-                        "alias",
-                        "title",
-                        "description",
-                        "usage",
-                        "format",
-                        "details",
-                        "source",
-                        "references",
-                        "keyword"];
+      let orderedKeys = [
+        "package",
+        "alias",
+        "title",
+        "description",
+        "usage",
+        "format",
+        "details",
+        "source",
+        "references",
+        "keyword"
+      ];
       let sortedMethodInfo = {}
 
       orderedKeys.forEach( (key,index)=> {
@@ -277,6 +377,7 @@ export default new Vuex.Store({
         sortedMethodInfo[ orderedKeys[ index ] ] = state.methodInfo[ key ]
       })
       return sortedMethodInfo
-    }
+    },
+
   }
 })
