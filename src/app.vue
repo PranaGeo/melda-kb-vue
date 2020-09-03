@@ -1,8 +1,9 @@
 <template>
   <div class="container-fluid">
     <div class="mt-2">
-      <meldakb> </meldakb>
-    </div>
+      <meldakb ref="mainComp" @goto="updateKbUrl" :emitOnGoto="true"/> 
+
+    </div>  
   </div>
 </template>
 
@@ -12,7 +13,30 @@
   export default {
     components: {
       Meldakb,
-   
+    },
+
+    data () {
+      return {
+        route: null
+      }
+    },
+
+    watch: {
+      "$route": function() {
+        this.$refs.mainComp.$store.dispatch('setRoute',{})
+      }
+
+    },
+    methods: {
+      updateKbUrl(route) {
+        if (route.packageName) {
+          uri = '/' + route.packageName
+        }
+        if (route.methodName) {
+          uri += '/' + route.methodName
+        }
+        this.$router.push('/' + route.to + uri)
+      }    
     },
 
   }

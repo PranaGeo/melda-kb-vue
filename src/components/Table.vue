@@ -9,7 +9,7 @@
 
 					<td style="text-align:right">
 						<button class="btn btn-primary"
-						@click="$store.dispatch('setRoute', {'to':viewAll})">
+						@click="goto({'to':viewAll})">
 							View All
 						</button> 
 					</td>
@@ -27,13 +27,10 @@
 
 			<tbody>
 				<tr v-for="(item,key) in tableData" :key="key"
-				@click="$store.dispatch('setRoute', 
-				{
-				'to':to, 
-				'packageName':item.Package,
-				'methodName':item.Method 
-				})">
-					<th v-for="(value,index) in item" :key="index" :title="value" v-html="value">  </th>
+				@click="goto({'to':to, 'packageName':item.Package, 'methodName':item.Method})">
+					<th 
+					class="nowrap"
+					 v-for="(value,index) in item" :key="index" :title="value" v-html="value">  </th>
 				</tr>
 			</tbody>
 		</table>
@@ -58,6 +55,28 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
-</style>
+.nowrap {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 1px;
+	text-align: center;
+
+
+
+}
+
+.table th  {
+	text-align: center;
+	padding: 0px;
+}
+
+.table td {
+	padding: 0px;
+	text-align: center;
+
+}
+</style>>
+

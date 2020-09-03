@@ -44,7 +44,7 @@ const breadcrumb = [
   },
 ]
 
-function  getBreadcrumb(to) {
+function getBreadcrumb(to) {
   let crumbs = []
   let current = getCurrentBreadcrumbItem(to)
   crumbs.splice(0,0,current)
@@ -57,12 +57,9 @@ function  getBreadcrumb(to) {
   return crumbs;
 }
 
-function setApiUrl(search,searchIn) {
-  let size = 30
-  let sortBy = ""
-  return `${API}/search?q=${search}&in=${searchIn}&size=${size}&sort=${sortBy}` 
+function setApiUrl(search,searchIn,size,page,sortBy) {
+  return `${API}/search?q=${search}&in=${searchIn}&size=${size}&page=${page}&sort=${sortBy}` 
 }
-
 function setBaseUrl(packageName,methodName) {
   return `${BASE}/cran-method-detail?package=${packageName}&method=${methodName}`
 }
@@ -106,7 +103,9 @@ export default new Vuex.Store({
     search: '',
     packageName: '',
     sortBy:'Most Related',
-     },
+    size:30,
+    page:1,
+    },
 
   mutations: {
     setPackagesCount: (state,packageCount) => state.packageCount = packageCount,
@@ -133,12 +132,16 @@ export default new Vuex.Store({
 
     setCurrentBreadcrumb: (state,breadcrumb) => state.breadcrumb = breadcrumb,
     
+    setCurrentBreadcrumb: (state,breadcrumb) => state.breadcrumb = breadcrumb,
+
+    increasePageNumber: state => state.page++,
+    
   },
 
   actions: {
-      async search ({commit}, searchIn) {
+      async search ({commit}, {searchIn,size,page,sortBy}) {
         try{
-          let url = setApiUrl (this.state.search, searchIn)
+          let url = setApiUrl (this.state.search, searchIn,this.state.size,this.state.page,this.state.sortBy)
           let response = await axios.get(url)
           if (!response.data) return;
 
@@ -196,24 +199,25 @@ export default new Vuex.Store({
       setRoute ({commit, dispatch}, {to, packageName, methodName}) {
         switch(to) {
         case "search-all":
-          dispatch('search','package' )
-          dispatch('search','method' )
-          dispatch('search','author' )
+          console.log("searc-all")
+          dispatch('search', {searchIn:'package'})
+          dispatch('search', {searchIn:'method'})
+          dispatch('search', {searchIn:'author'})
           commit("setCurrentRoute","search-all")
           dispatch('setBreadCrumb',{to})
           break;
         case "search-package-only":
-          dispatch('search',"package")
+          dispatch('search', {searchIn:'package'})
           commit("setCurrentRoute", "search-package-only")
           dispatch('setBreadCrumb',{to})
           break;
         case "search-method-only":
-          dispatch('search',"method")
+          dispatch('search', {searchIn:'method'})
           commit("setCurrentRoute","search-method-only")
           dispatch('setBreadCrumb',{to})
           break;
         case "search-author-only":
-          dispatch('search',"author")
+          dispatch('search', {searchIn:'author'})
           commit("setCurrentRoute","search-author-only")
           dispatch('setBreadCrumb',{to})
           break;
@@ -269,7 +273,8 @@ export default new Vuex.Store({
     getSlicedAuthors: state => {
       return state.authors.map( item => {
         return {
-                "Name": item.author,
+                "Author": item.author,
+                "Maintainer":item.maintainer,
                 "Package": item.name
               }
             })
@@ -298,8 +303,9 @@ export default new Vuex.Store({
     getAuthors: state => {
       return state.authors.map( item => {
         return {
-                "Name": item.author,
-                "Package": item.name
+                "Author": item.author,
+                "Maintainer":item.maintainer,
+                "Package": item.name,
               }
             })
     },

@@ -30,12 +30,7 @@
             </thead>
             <tbody>
 				<tr v-for="(item,key) in tableData" :key="key"
-				@click="$store.dispatch('setRoute', 
-				{
-				'to':to, 
-				'packageName':item.Name,
-				'methodName':item.name 
-				})"> 
+				@click="goto({'to':to, 'packageName':item.Name,'methodName':item.name})"> 
 					<th v-for="(value,index) in item" :key="index" :title="value" v-html="value">  </th>
 				</tr>
             </tbody>
