@@ -1,8 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="mt-2">
-      <meldakb ref="mainComp" @goto="updateKbUrl" :emitOnGoto="true"/> 
-
+      <meldakb ref="mainComp" @goto="updateKbUrl" :emitOnGoto="false"/>
     </div>  
   </div>
 </template>
