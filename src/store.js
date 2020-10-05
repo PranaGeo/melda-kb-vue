@@ -4,7 +4,7 @@ import axios from "axios"
 Vue.use(Vuex);
 
 const BASE = "https://appdev.melda.io/api/rkb" 
-const API = "https://kbdev.melda.io/"
+const API = "https://kbdev.melda.io"
 const SERVER = "https://dev.melda.io/" 
 const breadcrumb = [
   {
@@ -199,7 +199,6 @@ export default new Vuex.Store({
       setRoute ({commit, dispatch}, {to, packageName, methodName}) {
         switch(to) {
         case "search-all":
-          console.log("searc-all")
           dispatch('search', {searchIn:'package'})
           dispatch('search', {searchIn:'method'})
           dispatch('search', {searchIn:'author'})
