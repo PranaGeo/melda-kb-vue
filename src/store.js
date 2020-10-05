@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from "axios"
+import axios from "axios";
 Vue.use(Vuex);
 
 const BASE = "https://appdev.melda.io/api/rkb" 
@@ -47,20 +47,20 @@ const breadcrumb = [
 function getBreadcrumb(to) {
   let crumbs = []
   let current = getCurrentBreadcrumbItem(to)
-  crumbs.splice(0,0,current)
+  crumbs.splice(0, 0, current)
   
-  while(current.parentId) {
+  while (current.parentId) {
     let parent = getParentBreadcrumbItem(current)  
-    crumbs.splice(0,0,parent)
+    crumbs.splice(0, 0, parent)
     current = parent
   }
   return crumbs;
 }
 
-function setApiUrl(search,searchIn,size,page,sortBy) {
+function setApiUrl(search, searchIn, size, page, sortBy) {
   return `${API}/search?q=${search}&in=${searchIn}&size=${size}&page=${page}&sort=${sortBy}` 
 }
-function setBaseUrl(packageName,methodName) {
+function setBaseUrl(packageName, methodName) {
   return `${BASE}/cran-method-detail?package=${packageName}&method=${methodName}`
 }
 
@@ -69,22 +69,22 @@ function setPackageBaseUrl(packageName) {
 }
 
 function setCount(count) {
-  return count < 1000 ? count : Math.round(count/ 1000) + "K" 
+  return count < 1000 ? count : Math.round(count / 1000) + "K" 
 }
 
 function getCurrentBreadcrumbItem(route) {
-  return breadcrumb.filter(crumb => crumb.route == route)[0]
+  return breadcrumb.filter(crumb => crumb.route == route)[ 0 ]
 }
 
 function getParentBreadcrumbItem(current) {
-  return breadcrumb.filter(crumb => crumb.id == current.parentId)[0]
+  return breadcrumb.filter(crumb => crumb.id == current.parentId)[ 0 ]
 }
 
 export default new Vuex.Store({
   state: {
-    packageCount:0,
-    methodCount:0,
-    authorCount:0,
+    packageCount: 0,
+    methodCount: 0,
+    authorCount: 0,
     isSearching: false,
     route: 'search-all',
     loading: false,
@@ -97,22 +97,22 @@ export default new Vuex.Store({
     searchMethods: [],
     packageProjects: [],
     methodProjects: [],
-    breadcrumb:[],
+    breadcrumb: [],
     packageMethods: [],
     totalPages: 0,
     search: '',
     packageName: '',
-    sortBy:'Most Related',
-    size:30,
-    page:1,
-    },
+    sortBy: 'Most Related',
+    size: 30,
+    page: 1,
+  },
 
   mutations: {
-    setPackagesCount: (state,packageCount) => state.packageCount = packageCount,
+    setPackagesCount: (state, packageCount) => state.packageCount = packageCount,
 
-    setMethodsCount: (state,methodCount) => state.methodCount = methodCount,
+    setMethodsCount: (state, methodCount) => state.methodCount = methodCount,
 
-    setAuthorsCount: (state,authorCount) => state.authorCount = authorCount,
+    setAuthorsCount: (state, authorCount) => state.authorCount = authorCount,
 
     setPackagesResult: (state, packages) => state.packages = packages,
 
@@ -120,28 +120,28 @@ export default new Vuex.Store({
 
     setMethodsResult: (state, methods) => state.methods = methods,
 
-    updateSearch: (state,searchInput) => state.search = searchInput,
+    updateSearch: (state, searchInput) => state.search = searchInput,
 
-    setCurrentRoute: (state,route) => state.route = route,
+    setCurrentRoute: (state, route) => state.route = route,
     
-    setPackageItemResult: (state,packageInfo) => state.packageInfo = packageInfo,
+    setPackageItemResult: (state, packageInfo) => state.packageInfo = packageInfo,
     
-    setMethodItemResult: (state,methodInfo) => state.methodInfo = methodInfo,
+    setMethodItemResult: (state, methodInfo) => state.methodInfo = methodInfo,
 
-    setPackageMethods: (state,packageMethods) => state.packageMethods = packageMethods,
+    setPackageMethods: (state, packageMethods) => state.packageMethods = packageMethods,
 
-    setCurrentBreadcrumb: (state,breadcrumb) => state.breadcrumb = breadcrumb,
+    setCurrentBreadcrumb: (state, breadcrumb) => state.breadcrumb = breadcrumb,
     
-    setCurrentBreadcrumb: (state,breadcrumb) => state.breadcrumb = breadcrumb,
+    setCurrentBreadcrumb: (state, breadcrumb) => state.breadcrumb = breadcrumb,
 
     increasePageNumber: state => state.page++,
     
   },
 
   actions: {
-      async search ({commit}, {searchIn,size,page,sortBy}) {
+      async search ({ commit }, { searchIn, size, page, sortBy }) {
         try{
-          let url = setApiUrl (this.state.search, searchIn,this.state.size,this.state.page,this.state.sortBy)
+          let url = setApiUrl(this.state.search, searchIn, this.state.size, this.state.page, this.state.sortBy)
           let response = await axios.get(url)
           if (!response.data) return;
 
@@ -172,11 +172,11 @@ export default new Vuex.Store({
         }
       },
 
-      async getMethodItem ({commit}, {packageName,methodName}) {
+      async getMethodItem ({ commit }, { packageName, methodName }) {
         try{
-          let url = setBaseUrl (packageName,methodName)
+          let url = setBaseUrl (packageName, methodName)
           let response = await axios.get(url)
-          response.data.method.package =response.data.package.name
+          response.data.method.package = response.data.package.name
   
           commit('setMethodItemResult', response.data.method)
           commit('setPackageItemResult', response.data.package)
@@ -185,7 +185,7 @@ export default new Vuex.Store({
         }
       },
 
-      async getPackageItem({commit}, packageName) {
+      async getPackageItem({ commit }, packageName) {
         try {
           let url = setPackageBaseUrl (packageName)
           let response = await axios.get(url)
@@ -196,54 +196,54 @@ export default new Vuex.Store({
         }
       },
 
-      setRoute ({commit, dispatch}, {to, packageName, methodName}) {
+      setRoute ({ commit, dispatch }, { to, packageName, methodName }) {
         switch(to) {
         case "search-all":
-          dispatch('search', {searchIn:'package'})
-          dispatch('search', {searchIn:'method'})
-          dispatch('search', {searchIn:'author'})
-          commit("setCurrentRoute","search-all")
-          dispatch('setBreadCrumb',{to})
+          dispatch('search', { searchIn: 'package' })
+          dispatch('search', { searchIn: 'method' })
+          dispatch('search', { searchIn: 'author' })
+          commit("setCurrentRoute", "search-all")
+          dispatch('setBreadCrumb',{ to })
           break;
         case "search-package-only":
-          dispatch('search', {searchIn:'package'})
+          dispatch('search', { searchIn: 'package' })
           commit("setCurrentRoute", "search-package-only")
-          dispatch('setBreadCrumb',{to})
+          dispatch('setBreadCrumb', { to })
           break;
         case "search-method-only":
-          dispatch('search', {searchIn:'method'})
-          commit("setCurrentRoute","search-method-only")
-          dispatch('setBreadCrumb',{to})
+          dispatch('search', { searchIn: 'method' })
+          commit("setCurrentRoute", "search-method-only")
+          dispatch('setBreadCrumb', { to })
           break;
         case "search-author-only":
-          dispatch('search', {searchIn:'author'})
-          commit("setCurrentRoute","search-author-only")
-          dispatch('setBreadCrumb',{to})
+          dispatch('search', { searchIn: 'author' })
+          commit("setCurrentRoute", "search-author-only")
+          dispatch('setBreadCrumb', { to })
           break;
         case "package-detail":
           dispatch('getPackageItem', packageName)
-          commit("setCurrentRoute","package-detail")
-          dispatch('setBreadCrumb',{to,packageName})
+          commit("setCurrentRoute", "package-detail")
+          dispatch('setBreadCrumb', { to, packageName })
           break;
         case "method-detail":
-          dispatch('getMethodItem', {packageName, methodName})
-          commit("setCurrentRoute","method-detail")
-          dispatch('setBreadCrumb',{to,packageName,methodName})
+          dispatch('getMethodItem', { packageName, methodName })
+          commit("setCurrentRoute", "method-detail")
+          dispatch('setBreadCrumb', { to, packageName, methodName })
           break;
         }
       },
 
-      setBreadCrumb ({commit}, {to,packageName,methodName}) {
+      setBreadCrumb ({ commit }, { to, packageName, methodName }) {
         let breadcrumb = getBreadcrumb(to)
-        if(packageName){
-          breadcrumb[breadcrumb.length - 1].name = packageName
+        if(packageName) {
+          breadcrumb[ breadcrumb.length - 1 ].name = packageName
         }
 
         if(packageName && methodName){
-          breadcrumb[breadcrumb.length - 2].name = packageName
-          breadcrumb[breadcrumb.length - 1].name = methodName
+          breadcrumb[ breadcrumb.length - 2 ].name = packageName
+          breadcrumb[ breadcrumb.length - 1 ].name = methodName
         }
-        commit("setCurrentBreadcrumb",breadcrumb)
+        commit("setCurrentBreadcrumb", breadcrumb)
       },
 
     },
@@ -273,7 +273,7 @@ export default new Vuex.Store({
       return state.authors.map( item => {
         return {
                 "Author": item.author,
-                "Maintainer":item.maintainer,
+                "Maintainer": item.maintainer,
                 "Package": item.name
               }
             })
@@ -303,7 +303,7 @@ export default new Vuex.Store({
       return state.authors.map( item => {
         return {
                 "Author": item.author,
-                "Maintainer":item.maintainer,
+                "Maintainer": item.maintainer,
                 "Package": item.name,
               }
             })
@@ -351,12 +351,12 @@ export default new Vuex.Store({
       let unsortedKeys  = Object.keys(state.packageInfo)
       let sortedPackageInfo = {}
 
-      orderedKeys.forEach((key,index) => {
-        if( unsortedKeys.includes(key)){
+      orderedKeys.forEach(( key, index ) => {
+        if( unsortedKeys.includes(key)) {
             sortedPackageInfo [ namedKeys[ index ] ] = state.packageInfo [ key ]        
         }
       })
-      
+
       return sortedPackageInfo;
     },
 
@@ -375,6 +375,7 @@ export default new Vuex.Store({
         "references",
         "keyword"
       ];
+      
       let sortedMethodInfo = {}
 
       orderedKeys.forEach( (key,index)=> {

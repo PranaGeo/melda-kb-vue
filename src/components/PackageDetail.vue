@@ -2,7 +2,7 @@
     <div>
         <table class="table table-striped package-meta">
             <tbody>
-                <tr v-for="(item,key) in packageInfo">
+                <tr v-for="(item, key) in packageInfo">
                     <th> {{ key }} </th>
                     <td v-html="item"> 
                     </td>
@@ -31,15 +31,15 @@
             <tbody>
                 <tr
                 v-for="methodItem in packageMethods"
-                @click="goto({'to':to, 'packageName':packageName, 'methodName':methodItem.name })">
+                @click="goto({ 'to': to, 'packageName': packageName, 'methodName': methodItem.name })">
                     <td class="text-primary package-name">
-                        {{ (methodItem.name) }}
+                        {{ methodItem.name }}
                     </td>
                     <td
                         :title="methodItem.description"
                         class="nowrap"
                         style="max-width: 1px"
-                        v-html="(methodItem.description)"
+                        v-html="methodItem.description"
                     ></td>
                 </tr>
             </tbody>
@@ -50,14 +50,13 @@
 
 <script>
 export default {
-    props:	["packageInfo","packageMethods","to"],
+    props:  [ "packageInfo", "packageMethods", "to" ],
     
     computed: {
         packageName() {
-            return this.packageInfo["Package Name"]
+            return this.packageInfo[ "Package Name" ]
         }
     }
-
 }
 </script>
 

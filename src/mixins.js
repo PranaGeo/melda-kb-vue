@@ -4,7 +4,7 @@ export default {
             if(this.emitOnGoto) {
                 this.$emit('goto', route)
             } else {
-                this.$store.dispatch('setRoute',route)
+                this.$store.dispatch('setRoute', route)
             }
         }
     }

@@ -3,13 +3,13 @@
 		<table v-if="tableName" class="table table-borderless" style="borderless">
 			<tbody> 
 				<tr class="table-active">
-					<th style="text-align:left"> {{ tableName }} 
-						<span> {{count}}</span>
+					<th style="text-align:left"> {{ tableName }}
+						<span> {{ count }}</span>
 					</th>
 
 					<td style="text-align:right">
 						<button class="btn btn-primary"
-						@click="goto({'to':viewAll})">
+						@click="goto({ 'to': viewAll })">
 							View All
 						</button> 
 					</td>
@@ -27,7 +27,7 @@
 
 			<tbody>
 				<tr v-for="(item,key) in tableData" :key="key"
-				@click="goto({'to':to, 'packageName':item.Package, 'methodName':item.Method})">
+				@click="goto({ 'to': to, 'packageName': item.Package, 'methodName': item.Method })">
 					<th 
 					class="nowrap"
 					 v-for="(value,index) in item" :key="index" :title="value" v-html="value">  </th>
@@ -39,33 +39,29 @@
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
 
-	props:	["tableName","tableData","count","to", "viewAll"],
+	props:	[ "tableName", "tableData", "count", "to", "viewAll" ],
 
 	methods: {
-		...mapActions(['setRoute']),
+		...mapActions([ 'setRoute' ]),
 	},
 
 	computed: {
-		...mapState( ['search'])
+		...mapState([ 'search' ])
 	}
 }
 </script>
 
 <style scoped>
-
 .nowrap {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	max-width: 1px;
 	text-align: center;
-
-
-
 }
 
 .table th  {
@@ -76,7 +72,5 @@ export default {
 .table td {
 	padding: 0px;
 	text-align: center;
-
 }
-</style>>
-
+</style>

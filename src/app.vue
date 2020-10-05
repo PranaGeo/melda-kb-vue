@@ -14,7 +14,7 @@
       Meldakb,
     },
 
-    data () {
+    data() {
       return {
         route: null
       }
@@ -22,7 +22,7 @@
 
     watch: {
       "$route": function() {
-        this.$refs.mainComp.$store.dispatch('setRoute',{})
+        this.$refs.mainComp.$store.dispatch('setRoute', {})
       }
 
     },

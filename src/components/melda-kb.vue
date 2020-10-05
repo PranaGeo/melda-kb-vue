@@ -11,7 +11,7 @@
             <li>
               <a class="breadcrumb-item"
                   v-for="(item,index) in breadcrumb"
-                  @click="goto({'to':item.route})"
+                  @click="goto({ 'to': item.route })"
                   v-bind:class = "{ 'active': index + 1 == breadcrumb.length }"
                   >
                 {{ item.name }}
@@ -26,7 +26,7 @@
           <input type="text"
                 placeholder="Search in Packages, Methods, Authors"
                 class="form-control form-control-md mb-3"
-                @keydown.enter="goto({'to':'search-all','search':search})"
+                @keydown.enter="goto({ 'to': 'search-all', 'search': search })"
                 v-model="search"
           >
 
@@ -73,7 +73,6 @@
                         :tableData='getAuthors'
                         :to="'package-detail'"
                         :tableName="'Authors'"
-
             /> 
         </div>
         
@@ -83,13 +82,11 @@
                           :to="'method-detail'"
                             
           > 
-          
           </package-detail>
         </div>
 
         <div v-else-if="route === 'method-detail'">
           <method-detail :methodInfo="getSortedMethodInfo"> 
-            
           </method-detail>            
         </div>
     </div>
@@ -103,10 +100,8 @@ import TableList from "./TableList.vue"
 import PackageDetail from "./PackageDetail.vue"
 import MethodDetail from "./MethodDetail.vue"
 
-
-
 import Clipboard from 'v-clipboard'
-import {mapGetters, mapState, mapActions} from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 
 export default {
   name: 'meldakb',
@@ -119,8 +114,8 @@ export default {
 
   props: {
     emitOnGoto: {
-      type:Boolean,
-      default:false
+      type: Boolean,
+      default: false
     }
   },
 
@@ -132,9 +127,9 @@ export default {
   },
 
   beforeMount(){
-    this.$store.dispatch('search',{searchIn:'package'})
-    this.$store.dispatch('search',{searchIn:'method'})
-    this.$store.dispatch('search',{searchIn:'author'})
+    this.$store.dispatch('search', { searchIn:'package' })
+    this.$store.dispatch('search', { searchIn:'method' })
+    this.$store.dispatch('search', { searchIn:'author' })
   },
 
   computed : {
@@ -159,23 +154,20 @@ export default {
       "getSlicedAuthors",
       "getSortedPackageInfo",
       "getSortedMethodInfo",
-      ]),
-
+    ]),
 
     search: {
-      get () {
+      get() {
          return this.$store.state.search
       },
-      set (searchInput) {
+      set(searchInput) {
         this.$store.commit('updateSearch', searchInput)
       }
     }
   },
 
 }
-
 </script>
 
 <style scoped>
-
 </style>
